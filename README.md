@@ -1,3 +1,4 @@
+<img width="500" height="300" alt="Screenshot 2026-10-21 155451" src="https://github.com/user-attachments/assets/46af3071-07e9-4dab-adcd-5637dfbc6cfd" />
 # Aplicacion-para-aprender-idiomas
 Una plataforma integral diseñada para la adquisición eficiente de nuevas competencias lingüísticas. Mediante metodologías de aprendizaje adaptativo y un diseño centrado en la retención a largo plazo, optimizamos el desarrollo de la fluidez profesional y personal en cualquier entorno global.
 # SpeakEasy - Aplicación Móvil de Aprendizaje de Idiomas
