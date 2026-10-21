@@ -26,3 +26,11 @@ El objetivo de este prototipo es ofrecer un flujo continuo desde la personalizac
 
 <img width="500" height="300" alt="Screenshot 2026-10-21 154918" src="https://github.com/user-attachments/assets/70478f8a-a9c3-4565-9c1e-f2c683a4c2f9" />
 <img width="500" height="300" alt="Screenshot 2026-10-21 155451" src="https://github.com/user-attachments/assets/46af3071-07e9-4dab-adcd-5637dfbc6cfd" />
+
+## Autor
+
+Martha Patricia Soriano Mosqueira
+
+Universidad Politécnica de Altamira
+
+Altamira Tamps.
