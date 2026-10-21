@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeakEasy</title>
+
+    <!-- Fuente moderna Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #d9c0e5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        /* ================================= */
+        /* PANTALLAS (TAMAÑO MÓVIL) */
+        /* ================================= */
+
+        .pantalla {
+            width: 400px;
+            height: 700px;
+            background: #E6C7ED;
+            border-radius: 28px;
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 12px 30px rgba(123, 21, 153, 0.2);
+            position: relative;
+        }
+
+        /* ================================= */
+        /* BOTONES GENERALES */
+        /* ================================= */
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        button:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .comenzar, .siguiente {
+            width: 220px;
+            height: 52px;
+            background: #9291C9;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(146, 145, 201, 0.35);
+        }
+
+        /* ================================= */
+        /* EFECTO DIFUMINADO EN PERSONAJES  */
+        /* ================================= */
+
+        .img-difuminada {
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+            filter: drop-shadow(0px 6px 12px rgba(123, 21, 153, 0.25));
+        }
+
+        /* ================================= */
+        /* PRIMERA PANTALLA - INICIO BIENVENIDA */
+        /* ================================= */
+
+        #inicio {
+            padding-top: 25px;
+            justify-content: space-between;
+            padding-bottom: 35px;
+        }
+
+        #inicio img {
+            width: 270px;
+            height: 270px;
+            object-fit: contain;
+        }
+
+        #inicio h1 {
+            color: #7B1599;
+            font-size: 32px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        #inicio p {
+            color: #7B1599;
+            font-size: 23px;
+            line-height: 1.25;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        /* ================================= */
+        /* NUEVA PANTALLA - INICIO PRINCIPAL / DASHBOARD */
+        /* ================================= */
+
+        #inicioPrincipal {
+            display: none;
+            background: #1e1233;
+            color: white;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .contenedor-dashboard {
+            width: 100%;
+            padding: 25px 20px 10px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow-y: auto;
+            flex: 1;
+            text-align: left;
+        }
+
+        .saludo-usuario {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 5px;
+            color: #ffffff;
+        }
+
+        .avatar-contenedor {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .avatar-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #E6C7ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            border: 2px solid #a88beb;
+        }
+
+        .card-dash {
+            background: #2b1c48;
+            border-radius: 18px;
+            padding: 14px 16px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card-dash:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-meta-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e0d0f5;
+        }
+
+        .barra-meta-bg {
+            width: 100%;
+            height: 8px;
+            background: #3c2960;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .barra-meta-fill {
+            width: 35%;
+            height: 100%;
+            background: #a855f7;
+            border-radius: 10px;
+        }
+
+        .card-con-icono {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-info-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-dash {
+            font-size: 22px;
+        }
+
+        .card-titulos h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .card-titulos p {
+            font-size: 12px;
+            color: #b3a2ce;
+            margin-top: 2px;
+        }
+
+        .arrow-dash {
+            color: #b3a2ce;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .grid-doble {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .card-stat {
+            background: #2b1c48;
+            border-radius: 18px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .stat-num {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .grafico-racha {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 30px;
+            margin-top: 4px;
+        }
+
+        .col-racha {
+            flex: 1;
+            background: #6b46a1;
+            border-radius: 4px;
+        }
+
+        .col-racha.activa {
+            background: #a855f7;
+        }
+
+        .seccion-explorar {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 5px;
+            color: #ffffff;
+        }
+
+        .carrusel-lecciones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding-bottom: 5px;
+        }
+
+        .card-mini-leccion {
+            height: 65px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-mini-leccion:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-mini-leccion span.icon {
+            font-size: 18px;
+        }
+
+        .card-mini-leccion span.label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1e1233;
+            text-align: center;
+        }
+
+        /* ================================= */
+        /* SEGUNDA PANTALLA - IDIOMAS */
+        /* ================================= */
+
+        #idiomas {
+            display: none;
+            padding-top: 60px;
+            width: 100%;
+            justify-content: space-between;
+            padding-bottom: 35px;
+        }
+
+        .titulo {
+            background: #9291C9;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(146, 145, 201, 0.25);
+        }
+
+        .contenedor-idiomas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .idioma {
+            width: 170px;
+            height: 40px;
+            background: #9291C9;
+            color: white;
+            font-size: 19px;
+            font-weight: 500;
+            margin-bottom: 14px;
+        }
+
+        .idioma.seleccionado {
+            background: #7B1599;
+            box-shadow: 0 4px 12px rgba(123, 21, 153, 0.35);
+        }
+
+        .globo {
+            font-size: 130px;
+            line-height: 1;
+            margin: 5px 0;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+        }
+
+        /* ================================= */
+        /* TERCERA PANTALLA - SOBRE TI */
+        /* ================================= */
+
+        #sobreMi {
+            display: none;
+            background: white;
+            position: relative;
+            justify-content: flex-start;
+        }
+
+        .parte-superior {
+            width: 100%;
+            height: 205px;
+            background: #E6C7ED;
+            position: relative;
+            padding-top: 35px;
+            text-align: left;
+        }
+
+        .titulo-sobre-mi {
+            color: #7B1599;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            width: 190px;
+            margin-left: 20px;
+            text-align: center;
+        }
+
+        .subtitulo {
+            color: #8C7B8D;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.3;
+            width: 185px;
+            margin-left: 20px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .personaje2 {
+            position: absolute;
+            width: 165px;
+            height: 190px;
+            object-fit: contain;
+            right: 0px;
+            bottom: 0px;
+        }
+
+        .contenido {
+            width: 100%;
+            height: 495px;
+            background: white;
+            border-radius: 25px 25px 0 0;
+            padding: 26px 18px;
+            text-align: left;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .pregunta {
+            color: #222222;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .nombre {
+            width: 100%;
+            height: 42px;
+            border: none;
+            border-radius: 20px;
+            background: #EFEFEF;
+            padding: 0 18px;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 20px;
+            color: #222;
+            transition: all 0.2s;
+        }
+
+        .nombre:focus {
+            box-shadow: 0 0 0 2px #9291C9;
+            background: #ffffff;
+        }
+
+        .niveles {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .nivel {
+            flex: 1;
+            height: 46px;
+            background: #EFEFEF;
+            color: #333;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 12px;
+        }
+
+        .nivel.seleccionado {
+            background: #9291C9;
+            color: white;
+            box-shadow: 0 3px 8px rgba(146, 145, 201, 0.35);
+        }
+
+        .tiempos {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tiempo {
+            width: 190px;
+            height: 36px;
+            background: #EFEFEF;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 18px;
+        }
+
+        .tiempo.seleccionado {
+            background: #9291C9;
+            color: white;
+            box-shadow: 0 3px 8px rgba(146, 145, 201, 0.35);
+        }
+
+        .btn-finalizar {
+            width: 100%;
+            height: 48px;
+            background: #7B1599;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 15px;
+            margin-top: 25px;
+            box-shadow: 0 4px 12px rgba(123, 21, 153, 0.3);
+        }
+
+        /* ================================= */
+        /* CUARTA PANTALLA - LECCIONES / UNIDAD */
+        /* ================================= */
+
+        #unidad {
+            display: none;
+            background: #F4E8F8;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .header-unidades {
+            width: 100%;
+            padding: 20px 20px 10px 20px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            color: #7B1599;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .titulo-nivel {
+            color: #7B1599;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .points-badge {
+            background: #7B1599;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .info-unidad {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .titulo-unidad {
+            color: #7B1599;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .progreso-header {
+            display: flex;
+            justify-content: space-between;
+            color: #8C7B8D;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .barra-progreso-bg {
+            width: 100%;
+            height: 8px;
+            background: #E2D0E7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .barra-progreso-fill {
+            width: 25%;
+            height: 100%;
+            background: #7B1599;
+            border-radius: 10px;
+        }
+
+        .contenedor-lecciones {
+            width: 100%;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .card-leccion {
+            background: white;
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card-leccion:hover {
+            transform: scale(1.01);
+        }
+
+        .leccion-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-leccion {
+            font-size: 32px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .detalles-leccion h4 {
+            color: #222;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .detalles-leccion p {
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .estado-completada { color: #8C7B8D; }
+        .estado-progreso { color: #7B1599; }
+        .estado-bloqueada { color: #A393A6; }
+
+        .status-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .icon-check {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .icon-arrow {
+            background: #EFEFEF;
+            color: #7B1599;
+            font-weight: bold;
+        }
+
+        .icon-lock {
+            color: #A393A6;
+            font-size: 18px;
+        }
+
+        /* NAVEGACIÓN INFERIOR COMPARTIDA */
+        .bottom-nav {
+            width: 100%;
+            height: 65px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #EAEAEA;
+            padding: 0 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: #A393A6;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-item.activo {
+            color: #7B1599;
+        }
+
+        .nav-item-icon {
+            font-size: 18px;
+        }
+
+        /* ================================= */
+        /* QUINTA PANTALLA - DETALLE DE LECCIÓN */
+        /* ================================= */
+
+        #leccionDetalle {
+            display: none;
+            background: white;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .header-leccion {
+            width: 100%;
+            background: #E6C7ED;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .titulo-leccion-header {
+            text-align: center;
+        }
+
+        .titulo-leccion-header h3 {
+            color: #7B1599;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .titulo-leccion-header p {
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .progress-indicator {
+            text-align: right;
+            font-size: 12px;
+            font-weight: 700;
+            color: #7B1599;
+        }
+
+        .mini-progress-bar {
+            width: 40px;
+            height: 8px;
+            background: #7B1599;
+            border-radius: 10px;
+            margin-top: 4px;
+        }
+
+        .contenido-leccion {
+            width: 100%;
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        .seccion-titulo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bloque-interactivo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .frases-escucha {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .card-frase {
+            background: #F4E8F8;
+            padding: 10px 16px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-frase span {
+            font-weight: 700;
+            color: #222;
+            font-size: 15px;
+        }
+
+        .btn-audio {
+            background: #E6C7ED;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7B1599;
+            font-size: 16px;
+        }
+
+        .personaje-leccion {
+            width: 130px;
+            height: 140px;
+            object-fit: contain;
+        }
+
+        .lista-palabras {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item-palabra {
+            background: #FAF8FB;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .palabra-en {
+            font-weight: 700;
+            font-size: 13px;
+            color: #222;
+        }
+
+        .palabra-es {
+            font-size: 12px;
+            color: #8C7B8D;
+            font-weight: 500;
+        }
+
+        .footer-leccion {
+            width: 100%;
+            padding: 15px 20px;
+            background: white;
+        }
+
+        .btn-continuar-leccion {
+            width: 100%;
+            height: 48px;
+            background: #7B1599;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(123, 21, 153, 0.3);
+        }
+
+        /* ================================= */
+        /* SEXTA PANTALLA - EJERCICIOS */
+        /* ================================= */
+
+        #ejercicioDetalle {
+            display: none;
+            background: white;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .header-ejercicio {
+            width: 100%;
+            background: #E6C7ED;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .titulo-ejercicio-header {
+            text-align: center;
+        }
+
+        .titulo-ejercicio-header h3 {
+            color: #7B1599;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .contenido-ejercicio {
+            width: 100%;
+            padding: 24px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .instruccion-ejercicio {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-pregunta {
+            background: #FAF8FB;
+            border: 1px solid #EAEAEA;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 25px;
+        }
+
+        .opciones-ejercicio {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .opcion-btn {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            border: 1px solid #EAEAEA;
+            background: #FAF8FB;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .opcion-btn.correcta {
+            background: #F4E8F8;
+            border-color: #D3A7DE;
+            color: #222;
+            font-weight: 700;
+        }
+
+        .opcion-btn .check-icon {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: #7B1599;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .check-left { left: 15px; }
+        .check-right { right: 15px; }
+
+        .footer-ejercicio {
+            width: 100%;
+            padding: 15px 20px 25px 20px;
+            background: white;
+        }
+
+        .btn-comprobar {
+            width: 100%;
+            height: 50px;
+            background: #7B1599;
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 22px;
+            box-shadow: 0 4px 12px rgba(123, 21, 153, 0.3);
+        }
+
+        /* ================================= */
+        /* SÉPTIMA PANTALLA - TRADUCTOR */
+        /* ================================= */
+
+        #traductorDetalle {
+            display: none;
+            background: #F9F5FB;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .header-traductor {
+            width: 100%;
+            background: #E6C7ED;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .titulo-traductor-header h3 {
+            color: #7B1599;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .contenido-traductor {
+            width: 100%;
+            padding: 16px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .selector-idiomas-traductor {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .select-lang {
+            flex: 1;
+            background: white;
+            border: 1px solid #EAEAEA;
+            border-radius: 16px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-swap {
+            color: #7B1599;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .box-traductor-input {
+            background: white;
+            border-radius: 18px;
+            padding: 14px;
+            border: 1px solid #EAEAEA;
+            position: relative;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .box-traductor-input textarea {
+            border: none;
+            outline: none;
+            resize: none;
+            width: 100%;
+            height: 60px;
+            font-size: 13px;
+            color: #333;
+            background: transparent;
+        }
+
+        .box-traductor-input textarea::placeholder {
+            color: #A393A6;
+        }
+
+        .input-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .icon-action-btn {
+            background: none;
+            border: none;
+            color: #A393A6;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .box-traductor-result {
+            background: white;
+            border-radius: 18px;
+            padding: 16px;
+            border: 1px solid #EAEAEA;
+            position: relative;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .text-original {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .text-traducido {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            margin-top: 6px;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            color: #A393A6;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .seccion-recientes-titulo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #444;
+            margin-top: 8px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .contenedor-recientes {
+            background: white;
+            border-radius: 18px;
+            padding: 12px 16px;
+            border: 1px solid #EAEAEA;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .item-reciente {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .reciente-left, .reciente-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .reciente-left { color: #222; }
+        .reciente-right { color: #555; }
+
+        .btn-audio-mini {
+            color: #B288C0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* ================================= */
+        /* OCTAVA PANTALLA - PERFIL */
+        /* ================================= */
+
+        #perfilDetalle {
+            display: none;
+            background: #F9F5FB;
+            padding: 0;
+            justify-content: space-between;
+        }
+
+        .header-perfil {
+            width: 100%;
+            background: #7B1599;
+            color: white;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-perfil .btn-back {
+            color: white;
+        }
+
+        .titulo-perfil-header {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .contenido-perfil {
+            width: 100%;
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .card-usuario {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .avatar-perfil {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #E6C7ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 3px solid #E6C7ED;
+            margin-bottom: 8px;
+        }
+
+        .nombre-usuario {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .subtitulo-usuario {
+            font-size: 12px;
+            color: #8C7B8D;
+            font-weight: 500;
+        }
+
+        .seccion-perfil-titulo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-top: 2px;
+        }
+
+        .card-progreso-perfil {
+            background: white;
+            border-radius: 18px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .item-progreso-filo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .card-idioma-perfil {
+            background: white;
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .bandera-idioma {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .estado-badge {
+            font-size: 11px;
+            color: #8C7B8D;
+            font-weight: 500;
+        }
+
+        .btn-perfil-opcion {
+            width: 100%;
+            height: 44px;
+            background: #7B1599;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 14px;
+            margin-top: 4px;
+        }
+
+        .btn-perfil-secundario {
+            width: 100%;
+            height: 44px;
+            background: transparent;
+            color: #7B1599;
+            border: 1px solid #7B1599;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PANTALLA 1: INICIO BIENVENIDA -->
+    <div class="pantalla" id="inicio">
+        <div>
+            <img src="personaje.png" alt="Personaje SpeakEasy" class="img-difuminada">
+            <h1>SpeakEasy</h1>
+        </div>
+
+        <p>
+            Tu próxima<br>
+            conversación<br>
+            con el mundo<br>
+            comienza<br>
+            aquí.
+        </p>
+
+        <button class="comenzar" onclick="mostrarIdiomas()">
+            Comenzar
+        </button>
+    </div>
+
+    <!-- PANTALLA 2: IDIOMAS -->
+    <div class="pantalla" id="idiomas">
+        <div style="width: 100%;">
+            <div class="titulo">
+                Selecciona tu idioma
+            </div>
+
+            <div class="contenedor-idiomas">
+                <button class="idioma seleccionado" onclick="seleccionarIdioma(this)">Español</button>
+                <button class="idioma" onclick="seleccionarIdioma(this)">Inglés</button>
+                <button class="idioma" onclick="seleccionarIdioma(this)">Francés</button>
+                <button class="idioma" onclick="seleccionarIdioma(this)">Alemán</button>
+            </div>
+        </div>
+
+        <div class="globo">🌎</div>
+
+        <button class="siguiente" onclick="mostrarSobreMi()">
+            Siguiente
+        </button>
+    </div>
+
+    <!-- PANTALLA 3: CUÉNTANOS SOBRE TI -->
+    <div class="pantalla" id="sobreMi">
+        <div class="parte-superior">
+            <div class="titulo-sobre-mi">
+                Cuéntanos<br>
+                sobre ti
+            </div>
+
+            <div class="subtitulo">
+                Personaliza tu experiencia<br>
+                de aprendizaje
+            </div>
+
+            <img src="personaje2.png" class="personaje2 img-difuminada" alt="Personaje SpeakEasy">
+        </div>
+
+        <div class="contenido">
+            <div class="pregunta">
+                👤 ¿Cómo quieres que te llamemos?
+            </div>
+            <input type="text" class="nombre" placeholder="Escribe tu nombre" value="Martha Soriano">
+
+            <div class="pregunta">
+                📊 ¿Cuál es tu nivel actual?
+            </div>
+            <div class="niveles">
+                <button class="nivel seleccionado" onclick="seleccionarNivel(this)">⭐ Principiante</button>
+                <button class="nivel" onclick="seleccionarNivel(this)">📈 Intermedio</button>
+                <button class="nivel" onclick="seleccionarNivel(this)">🚀 Avanzado</button>
+            </div>
+
+            <div class="pregunta">
+                ⏰ ¿Cuánto tiempo quieres aprender al día?
+            </div>
+            <div class="tiempos">
+                <button class="tiempo" onclick="seleccionarTiempo(this)">◷ 15 minutos</button>
+                <button class="tiempo seleccionado" onclick="seleccionarTiempo(this)">◷ 30 minutos</button>
+                <button class="tiempo" onclick="seleccionarTiempo(this)">◷ 60 minutos</button>
+            </div>
+
+            <button class="btn-finalizar" onclick="mostrarInicioPrincipal()">
+                Finalizar y Continuar
+            </button>
+        </div>
+    </div>
+
+    <!-- NUEVA PANTALLA: INICIO PRINCIPAL / DASHBOARD -->
+    <div class="pantalla" id="inicioPrincipal">
+        <div class="contenedor-dashboard">
+            <div class="saludo-usuario">¡Hola Martha Soriano!</div>
+            
+            <div class="avatar-contenedor">
+                <div class="avatar-img">👤</div>
+            </div>
+
+            <!-- Card: Meta Actual -->
+            <div class="card-dash">
+                <div class="card-meta-header">
+                    <span>Tu Meta Actual</span>
+                    <span>1,00% Fs</span>
+                </div>
+                <div class="barra-meta-bg">
+                    <div class="barra-meta-fill"></div>
+                </div>
+            </div>
+
+            <!-- Card: Próxima Unidad -->
+            <div class="card-dash card-con-icono" onclick="mostrarUnidad()">
+                <div class="card-info-left">
+                    <span class="icon-dash">🏆</span>
+                    <div class="card-titulos">
+                        <h4>Próxima Unidad</h4>
+                        <p>Próxima Unidad</p>
+                    </div>
+                </div>
+                <span class="arrow-dash">›</span>
+            </div>
+
+            <!-- Card: Lección Recomendada -->
+            <div class="card-dash card-con-icono" onclick="mostrarLeccionDetalle()">
+                <div class="card-info-left">
+                    <span class="icon-dash">💡</span>
+                    <div class="card-titulos">
+                        <h4>Lección Recomendada</h4>
+                        <p>Lección | Lección 1</p>
+                    </div>
+                </div>
+                <span class="arrow-dash">›</span>
+            </div>
+
+            <!-- Grid Doble: Práctica Rápida / Racha -->
+            <div class="grid-doble">
+                <div class="card-stat" onclick="mostrarEjercicioDetalle()">
+                    <div class="stat-header">
+                        <span>📝</span> Práctica Rápida
+                    </div>
+                    <div class="stat-num">0</div>
+                </div>
+
+                <div class="card-stat">
+                    <div class="stat-header">
+                        <span>📊</span> Tu Racha
+                    </div>
+                    <div class="grafico-racha">
+                        <div class="col-racha" style="height: 30%;"></div>
+                        <div class="col-racha" style="height: 50%;"></div>
+                        <div class="col-racha" style="height: 40%;"></div>
+                        <div class="col-racha activa" style="height: 80%;"></div>
+                        <div class="col-racha activa" style="height: 100%;"></div>
+                        <div class="col-racha" style="height: 20%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Explorar Lecciones -->
+            <div class="seccion-explorar">Explorar Módulos</div>
+            <div class="carrusel-lecciones">
+                <div class="card-mini-leccion" style="background:#fca5a5;" onclick="mostrarLeccionDetalle()">
+                    <span class="icon">📚</span>
+                    <span class="label">Vocabulario</span>
+                </div>
+                <div class="card-mini-leccion" style="background:#93c5fd;" onclick="mostrarEjercicioDetalle()">
+                    <span class="icon">✍️</span>
+                    <span class="label">Gramática</span>
+                </div>
+                <div class="card-mini-leccion" style="background:#fde047;" onclick="mostrarLeccionDetalle()">
+                    <span class="icon">🎙️</span>
+                    <span class="label">Pronunciación</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item activo" onclick="mostrarInicioPrincipal()">
+                <span class="nav-item-icon">🏠</span>
+                <span>Inicio</span>
+            </div>
+            <div class="nav-item" onclick="mostrarUnidad()">
+                <span class="nav-item-icon">📖</span>
+                <span>Lecciones</span>
+            </div>
+            <div class="nav-item" onclick="mostrarEjercicioDetalle()">
+                <span class="nav-item-icon">📝</span>
+                <span>Ejercicios</span>
+            </div>
+            <div class="nav-item" onclick="mostrarTraductorDetalle()">
+                <span class="nav-item-icon">🌐</span>
+                <span>Traductor</span>
+            </div>
+            <div class="nav-item" onclick="mostrarPerfilDetalle()">
+                <span class="nav-item-icon">👤</span>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 4: LECCIONES / UNIDAD -->
+    <div class="pantalla" id="unidad">
+        <div class="header-unidades">
+            <div class="top-bar">
+                <span class="btn-back" onclick="mostrarInicioPrincipal()">‹</span>
+                <span class="titulo-nivel">Nivel Principiante</span>
+                <div class="points-badge">
+                    🏆 120
+                </div>
+            </div>
+
+            <div class="info-unidad">
+                <div class="titulo-unidad">Unidad 1: Saludos y presentaciones</div>
+                <div class="progreso-header">
+                    <span>Progreso de unidad</span>
+                    <span>25%</span>
+                </div>
+                <div class="barra-progreso-bg">
+                    <div class="barra-progreso-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenedor-lecciones">
+            <!-- Lección 1 -->
+            <div class="card-leccion" onclick="mostrarLeccionDetalle()">
+                <div class="leccion-left">
+                    <span class="icon-leccion">👋</span>
+                    <div class="detalles-leccion">
+                        <h4>1. Saludos básicos</h4>
+                        <p class="estado-completada">Completada</p>
+                    </div>
+                </div>
+                <div class="status-icon icon-check">✓</div>
+            </div>
+
+            <!-- Lección 2 -->
+            <div class="card-leccion" onclick="mostrarLeccionDetalle()">
+                <div class="leccion-left">
+                    <span class="icon-leccion">💬</span>
+                    <div class="detalles-leccion">
+                        <h4>2. Presentaciones</h4>
+                        <p class="estado-completada">Completada</p>
+                    </div>
+                </div>
+                <div class="status-icon icon-check">✓</div>
+            </div>
+
+            <!-- Lección 3 -->
+            <div class="card-leccion" onclick="mostrarLeccionDetalle()">
+                <div class="leccion-left">
+                    <span class="icon-leccion">❓</span>
+                    <div class="detalles-leccion">
+                        <h4>3. Preguntas básicas</h4>
+                        <p class="estado-progreso">En progreso</p>
+                    </div>
+                </div>
+                <div class="status-icon icon-arrow">➔</div>
+            </div>
+
+            <!-- Lección 4 -->
+            <div class="card-leccion">
+                <div class="leccion-left">
+                    <span class="icon-leccion">✋</span>
+                    <div class="detalles-leccion">
+                        <h4>4. Despedidas</h4>
+                        <p class="estado-bloqueada">Bloqueada</p>
+                    </div>
+                </div>
+                <div class="status-icon icon-lock">🔒</div>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="mostrarInicioPrincipal()">
+                <span class="nav-item-icon">🏠</span>
+                <span>Inicio</span>
+            </div>
+            <div class="nav-item activo" onclick="mostrarUnidad()">
+                <span class="nav-item-icon">📖</span>
+                <span>Lecciones</span>
+            </div>
+            <div class="nav-item" onclick="mostrarEjercicioDetalle()">
+                <span class="nav-item-icon">📝</span>
+                <span>Ejercicios</span>
+            </div>
+            <div class="nav-item" onclick="mostrarTraductorDetalle()">
+                <span class="nav-item-icon">🌐</span>
+                <span>Traductor</span>
+            </div>
+            <div class="nav-item" onclick="mostrarPerfilDetalle()">
+                <span class="nav-item-icon">👤</span>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 5: DETALLE DE LECCIÓN INTERACTIVA -->
+    <div class="pantalla" id="leccionDetalle">
+        <div class="header-leccion">
+            <span class="btn-back" onclick="mostrarUnidad()">‹</span>
+            <div class="titulo-leccion-header">
+                <h3>Lección 1</h3>
+                <p>Saludos básicos</p>
+            </div>
+            <div class="progress-indicator">
+                <span>1/5</span>
+                <div class="mini-progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="contenido-leccion">
+            <div class="seccion-titulo">
+                <span>💬</span> Escucha y repite
+            </div>
+
+            <div class="bloque-interactivo">
+                <div class="frases-escucha">
+                    <div class="card-frase">
+                        <span>Hello!</span>
+                        <button class="btn-audio">🔊</button>
+                    </div>
+                    <div class="card-frase">
+                        <span>Hola!</span>
+                        <button class="btn-audio">🔊</button>
+                    </div>
+                </div>
+                <img src="personaje2.png" class="personaje-leccion img-difuminada" alt="Personaje SpeakEasy">
+            </div>
+
+            <div class="seccion-titulo">
+                <span>📖</span> Palabras nuevas
+            </div>
+
+            <div class="lista-palabras">
+                <div class="item-palabra">
+                    <span class="palabra-en">Hello</span>
+                    <div>
+                        <span class="palabra-es">Hola</span>
+                        <button class="btn-audio" style="display:inline-flex; width:28px; height:28px; font-size:12px; margin-left:8px;">🔊</button>
+                    </div>
+                </div>
+
+                <div class="item-palabra">
+                    <span class="palabra-en">Hi</span>
+                    <div>
+                        <span class="palabra-es">Hola (informal)</span>
+                        <button class="btn-audio" style="display:inline-flex; width:28px; height:28px; font-size:12px; margin-left:8px;">🔊</button>
+                    </div>
+                </div>
+
+                <div class="item-palabra">
+                    <span class="palabra-en">Good morning</span>
+                    <div>
+                        <span class="palabra-es">Buenos días</span>
+                        <button class="btn-audio" style="display:inline-flex; width:28px; height:28px; font-size:12px; margin-left:8px;">🔊</button>
+                    </div>
+                </div>
+
+                <div class="item-palabra">
+                    <span class="palabra-en">Good night</span>
+                    <div>
+                        <span class="palabra-es">Buenas noches</span>
+                        <button class="btn-audio" style="display:inline-flex; width:28px; height:28px; font-size:12px; margin-left:8px;">🔊</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-leccion">
+            <button class="btn-continuar-leccion" onclick="mostrarUnidad()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 6: EJERCICIOS -->
+    <div class="pantalla" id="ejercicioDetalle">
+        <div class="header-ejercicio">
+            <span class="btn-back" onclick="mostrarUnidad()">‹</span>
+            <div class="titulo-ejercicio-header">
+                <h3>Ejercicio</h3>
+            </div>
+            <div class="progress-indicator">
+                <span>3/10</span>
+                <div class="mini-progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="contenido-ejercicio">
+            <div class="instruccion-ejercicio">
+                <span>📖</span> Selecciona la traducción correcta
+            </div>
+
+            <div class="card-pregunta">
+                Good afternoon
+            </div>
+
+            <div class="opciones-ejercicio">
+                <button class="opcion-btn" onclick="seleccionarOpcionEjercicio(this)">
+                    Buenos días
+                </button>
+
+                <button class="opcion-btn correcta" onclick="seleccionarOpcionEjercicio(this)">
+                    <span class="check-icon check-left">✓</span>
+                    Buenas tardes
+                    <span class="check-icon check-right">✓</span>
+                </button>
+
+                <button class="opcion-btn" onclick="seleccionarOpcionEjercicio(this)">
+                    Buenas noches
+                </button>
+            </div>
+        </div>
+
+        <div class="footer-ejercicio">
+            <button class="btn-comprobar" onclick="mostrarUnidad()">Comprobar</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 7: TRADUCTOR -->
+    <div class="pantalla" id="traductorDetalle">
+        <div class="header-traductor">
+            <span class="btn-back" onclick="mostrarUnidad()">‹</span>
+            <div class="titulo-traductor-header">
+                <h3>Traductor</h3>
+            </div>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="contenido-traductor">
+            <div class="selector-idiomas-traductor">
+                <div class="select-lang">
+                    <span>Inglés</span>
+                    <span style="font-size: 10px; color: #888;">▼</span>
+                </div>
+                <span class="btn-swap">⇄</span>
+                <div class="select-lang">
+                    <span>Español</span>
+                    <span style="font-size: 10px; color: #888;">▼</span>
+                </div>
+            </div>
+
+            <div class="box-traductor-input">
+                <textarea placeholder="Escribe o pega tu texto en inglés..."></textarea>
+                <div class="input-actions">
+                    <button class="icon-action-btn">🔊</button>
+                </div>
+            </div>
+
+            <div class="box-traductor-result">
+                <div>
+                    <div class="text-original">How are you?</div>
+                    <div class="text-traducido">¿Cómo estás?</div>
+                </div>
+                <div class="result-actions">
+                    <span style="cursor: pointer;">📋</span>
+                    <span style="cursor: pointer;">📤</span>
+                </div>
+            </div>
+
+            <div class="seccion-recientes-titulo">
+                <span>🕒</span> Recientes
+            </div>
+
+            <div class="contenedor-recientes">
+                <div class="item-reciente">
+                    <div class="reciente-left">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>Good morning</span>
+                    </div>
+                    <div class="reciente-right">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>Buenos días</span>
+                    </div>
+                </div>
+
+                <div class="item-reciente">
+                    <div class="reciente-left">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>Thank you</span>
+                    </div>
+                    <div class="reciente-right">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>Gracias</span>
+                    </div>
+                </div>
+
+                <div class="item-reciente">
+                    <div class="reciente-left">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>I love languages</span>
+                    </div>
+                    <div class="reciente-right">
+                        <span class="btn-audio-mini">🔊</span>
+                        <span>Me encantan los idiomas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="mostrarInicioPrincipal()">
+                <span class="nav-item-icon">🏠</span>
+                <span>Inicio</span>
+            </div>
+            <div class="nav-item" onclick="mostrarUnidad()">
+                <span class="nav-item-icon">📖</span>
+                <span>Lecciones</span>
+            </div>
+            <div class="nav-item" onclick="mostrarEjercicioDetalle()">
+                <span class="nav-item-icon">📝</span>
+                <span>Ejercicios</span>
+            </div>
+            <div class="nav-item activo" onclick="mostrarTraductorDetalle()">
+                <span class="nav-item-icon">🌐</span>
+                <span>Traductor</span>
+            </div>
+            <div class="nav-item" onclick="mostrarPerfilDetalle()">
+                <span class="nav-item-icon">👤</span>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 8: PERFIL DE USUARIO -->
+    <div class="pantalla" id="perfilDetalle">
+        <div class="header-perfil">
+            <span class="btn-back" onclick="mostrarUnidad()">‹ Configuración</span>
+            <span class="titulo-perfil-header">Perfil</span>
+            <div style="width: 24px;"></div>
+        </div>
+
+        <div class="contenido-perfil">
+            <!-- Tarjeta Usuario -->
+            <div class="card-usuario">
+                <div class="avatar-perfil">👤</div>
+                <div class="nombre-usuario">Martha Soriano</div>
+                <div class="subtitulo-usuario">Estudiante de Idiomas</div>
+            </div>
+
+            <!-- Progreso -->
+            <div class="seccion-perfil-titulo">Mi Progreso</div>
+            <div class="card-progreso-perfil">
+                <div class="item-progreso-filo">
+                    <span>Nivel: ⭐ Principiante</span>
+                    <span style="color: #7B1599;">70%</span>
+                </div>
+                <div class="barra-progreso-bg">
+                    <div class="barra-progreso-fill" style="width: 70%;"></div>
+                </div>
+                <div class="item-progreso-filo" style="margin-top: 4px;">
+                    <span>🏆 350 Puntos</span>
+                    <span>🔥 Racha de 7 días</span>
+                </div>
+            </div>
+
+            <!-- Idiomas -->
+            <div class="seccion-perfil-titulo">Mis Idiomas</div>
+            <div class="card-idioma-perfil">
+                <div class="bandera-idioma">
+                    <span>🇬🇧</span> English
+                </div>
+                <span class="estado-badge">En progreso 🌐</span>
+            </div>
+            <div class="card-idioma-perfil">
+                <div class="bandera-idioma">
+                    <span>🇫🇷</span> French
+                </div>
+                <span class="estado-badge">Bloqueado 🌐</span>
+            </div>
+
+            <!-- Metas Diarias -->
+            <div class="seccion-perfil-titulo">Metas Diarias</div>
+            <div class="card-progreso-perfil" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <span style="font-size: 13px; font-weight: 600;">⏰ 30 min</span>
+                <span style="color: #7B1599; font-weight: 700;">📊 80%</span>
+            </div>
+
+            <!-- Botones de Acción -->
+            <button class="btn-perfil-opcion">Editar Perfil</button>
+            <button class="btn-perfil-secundario">Ajustes de Cuenta</button>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item" onclick="mostrarInicioPrincipal()">
+                <span class="nav-item-icon">🏠</span>
+                <span>Inicio</span>
+            </div>
+            <div class="nav-item" onclick="mostrarUnidad()">
+                <span class="nav-item-icon">📖</span>
+                <span>Lecciones</span>
+            </div>
+            <div class="nav-item" onclick="mostrarEjercicioDetalle()">
+                <span class="nav-item-icon">📝</span>
+                <span>Ejercicios</span>
+            </div>
+            <div class="nav-item" onclick="mostrarTraductorDetalle()">
+                <span class="nav-item-icon">🌐</span>
+                <span>Traductor</span>
+            </div>
+            <div class="nav-item activo" onclick="mostrarPerfilDetalle()">
+                <span class="nav-item-icon">👤</span>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function ocultarTodas() {
+            document.getElementById("inicio").style.display = "none";
+            document.getElementById("inicioPrincipal").style.display = "none";
+            document.getElementById("idiomas").style.display = "none";
+            document.getElementById("sobreMi").style.display = "none";
+            document.getElementById("unidad").style.display = "none";
+            document.getElementById("leccionDetalle").style.display = "none";
+            document.getElementById("ejercicioDetalle").style.display = "none";
+            document.getElementById("traductorDetalle").style.display = "none";
+            document.getElementById("perfilDetalle").style.display = "none";
+        }
+
+        function mostrarIdiomas() {
+            ocultarTodas();
+            document.getElementById("idiomas").style.display = "flex";
+        }
+
+        function mostrarSobreMi() {
+            ocultarTodas();
+            document.getElementById("sobreMi").style.display = "flex";
+        }
+
+        function mostrarInicioPrincipal() {
+            ocultarTodas();
+            document.getElementById("inicioPrincipal").style.display = "flex";
+        }
+
+        function mostrarUnidad() {
+            ocultarTodas();
+            document.getElementById("unidad").style.display = "flex";
+        }
+
+        function mostrarLeccionDetalle() {
+            ocultarTodas();
+            document.getElementById("leccionDetalle").style.display = "flex";
+        }
+
+        function mostrarEjercicioDetalle() {
+            ocultarTodas();
+            document.getElementById("ejercicioDetalle").style.display = "flex";
+        }
+
+        function mostrarTraductorDetalle() {
+            ocultarTodas();
+            document.getElementById("traductorDetalle").style.display = "flex";
+        }
+
+        function mostrarPerfilDetalle() {
+            ocultarTodas();
+            document.getElementById("perfilDetalle").style.display = "flex";
+        }
+
+        function seleccionarIdioma(boton) {
+            let botones = document.querySelectorAll(".idioma");
+            botones.forEach(function(b) {
+                b.classList.remove("seleccionado");
+            });
+            boton.classList.add("seleccionado");
+        }
+
+        function seleccionarNivel(boton) {
+            let botones = document.querySelectorAll(".nivel");
+            botones.forEach(function(b) {
+                b.classList.remove("seleccionado");
+            });
+            boton.classList.add("seleccionado");
+        }
+
+        function seleccionarTiempo(boton) {
+            let botones = document.querySelectorAll(".tiempo");
+            botones.forEach(function(b) {
+                b.classList.remove("seleccionado");
+            });
+            boton.classList.add("seleccionado");
+        }
+
+        function seleccionarOpcionEjercicio(boton) {
+            let opciones = document.querySelectorAll(".opcion-btn");
+            opciones.forEach(function(o) {
+                o.classList.remove("correcta");
+                o.querySelectorAll(".check-icon").forEach(e => e.remove());
+            });
+            boton.classList.add("correcta");
+            
+            const checkL = document.createElement("span");
+            checkL.className = "check-icon check-left";
+            checkL.textContent = "✓";
+            
+            const checkR = document.createElement("span");
+            checkR.className = "check-icon check-right";
+            checkR.textContent = "✓";
+
+            boton.prepend(checkL);
+            boton.appendChild(checkR);
+        }
+    </script>
+
+</body>
+
+</html>
