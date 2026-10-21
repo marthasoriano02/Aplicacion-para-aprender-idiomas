@@ -21,4 +21,4 @@ El objetivo de este prototipo es ofrecer un flujo continuo desde la personalizac
 * **Evaluación / Ejercicios:** Módulo práctico con preguntas interactiva y validación visual de respuestas.
 * **Traductor Integrado:** Herramienta de traducción directa entre idiomas con historial reciente.
 * **Perfil de Usuario:** Panel de gestión con métricas de progreso, racha y metas diarias.
-<img width="944" height="448" alt="Screenshot 2026-10-21 154918" src="https://github.com/user-attachments/assets/70478f8a-a9c3-4565-9c1e-f2c683a4c2f9" />
+<img width="500" height="300" alt="Screenshot 2026-10-21 154918" src="https://github.com/user-attachments/assets/70478f8a-a9c3-4565-9c1e-f2c683a4c2f9" />
